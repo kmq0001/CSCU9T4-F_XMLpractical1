@@ -41,9 +41,9 @@ public class DOMMenu {
     // load XML file into "document"
     loadDocument(args[0]);
     // print staff.xml using DOM methods and XPath queries
-    printNodes();
-  
-   
+    if (validateDocument(args[0])){
+      printNodes();
+    }
   }
 
   /**
@@ -96,6 +96,26 @@ public class DOMMenu {
     Node menuItem_2 = menuItem_1.getFirstChild().getNextSibling();
     System.out.println("First child is: " + menuItem_1.getNodeName());
     System.out.println("  Child is: " + menuItem_2.getNodeName());
+
+    NodeList nList = document.getElementsByTagName("*");
+
+    Node n;
+    Element eElement=null;
+
+    for (int i = 0; i < nList.getLength(); i++) {
+      System.out.println(nList.getLength());
+      n= nList.item(i);
+      System.out.println("\nCurrent Element :" + n.getNodeName());
+
+      if (n.getNodeType() == Node.ELEMENT_NODE) {
+        eElement = (Element) n.getChildNodes();
+        System.out.println("\nCurrent Element :" + n.getNodeName());
+        System.out.print(eElement.getElementsByTagName("component").item(i).getTextContent() + '\t'); //here throws null pointer exception after printing staff1 tag
+        System.out.print(eElement.getElementsByTagName("content").item(i).getTextContent() + '\t');
+        System.out.print(eElement.getElementsByTagName("sourcefolder").item(i).getTextContent() + '\t');
+        System.out.print(eElement.getElementsByTagName("orderentry").item(i).getTextContent() + '\t');
+      }
+    }
 
   }
 

@@ -43,7 +43,7 @@ public class SAXMenu {
       //reader.setFeature("http://xml.org/sax/features/validation",false);
 
       // register the relevant handler with the parser, choosing one of:
-      BasicHandler handler = new MenuHandler();
+      MenuHandler handler = new MenuHandler();
       //CountHandler handler = new CountHandler();
     
       reader.setContentHandler(handler);
