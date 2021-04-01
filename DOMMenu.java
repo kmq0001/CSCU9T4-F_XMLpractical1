@@ -41,7 +41,7 @@ public class DOMMenu {
     // load XML file into "document"
     loadDocument(args[0]);
     // print staff.xml using DOM methods and XPath queries
-    if (validateDocument(args[0])){
+    if (validateDocument(args[1])){
       printNodes();
     }
   }
@@ -83,8 +83,8 @@ public class DOMMenu {
       validator.validate(new DOMSource(document));
       return true;
     } catch (Exception e){
-      System.err.println(e);
       System.err.println("Could not load schema or validate");
+      System.err.println(e);
       return false;
     }
   }
@@ -92,31 +92,23 @@ public class DOMMenu {
     Print nodes using DOM methods and XPath queries.
   */
   private static void printNodes() {
-    Node menuItem_1 = document.getFirstChild();
-    Node menuItem_2 = menuItem_1.getFirstChild().getNextSibling();
-    System.out.println("First child is: " + menuItem_1.getNodeName());
-    System.out.println("  Child is: " + menuItem_2.getNodeName());
+    NodeList res = query("//item/name");
+    NodeList res1 = query("//item/price");
+    NodeList res2 = query("//item/description");
 
-    NodeList nList = document.getElementsByTagName("*");
-
-    Node n;
-    Element eElement=null;
-
-    for (int i = 0; i < nList.getLength(); i++) {
-      System.out.println(nList.getLength());
-      n= nList.item(i);
-      System.out.println("\nCurrent Element :" + n.getNodeName());
-
-      if (n.getNodeType() == Node.ELEMENT_NODE) {
-        eElement = (Element) n.getChildNodes();
-        System.out.println("\nCurrent Element :" + n.getNodeName());
-        System.out.print(eElement.getElementsByTagName("component").item(i).getTextContent() + '\t'); //here throws null pointer exception after printing staff1 tag
-        System.out.print(eElement.getElementsByTagName("content").item(i).getTextContent() + '\t');
-        System.out.print(eElement.getElementsByTagName("sourcefolder").item(i).getTextContent() + '\t');
-        System.out.print(eElement.getElementsByTagName("orderentry").item(i).getTextContent() + '\t');
+    for(int i = 0; i < res.getLength(); i++) {
+      Node name = res.item(i);
+      Node price = res1.item(i);
+      Node description = res2.item(i);
+      if (name.getTextContent().length() < 9) {
+        System.out.print(name.getTextContent() + "\t\t");
       }
+      else{
+        System.out.print(name.getTextContent() + "\t");
+      }
+      System.out.print(price.getTextContent() + "\t");
+      System.out.println(description.getTextContent());
     }
-
   }
 
   /**
@@ -125,10 +117,10 @@ public class DOMMenu {
     @param query        XPath query
     @return         result of query
   */
-  private static String query(String query) {
-    String result = "";
+  private static NodeList query(String query) {
+    NodeList result = null;
     try {
-      result = path.evaluate(query, document);
+      result = (NodeList) path.evaluate(query, document, XPathConstants.NODESET);
     }
     catch (Exception exception) {
       System.err.println("could not perform query - " + exception);
