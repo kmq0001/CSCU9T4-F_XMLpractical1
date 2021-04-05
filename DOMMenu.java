@@ -83,7 +83,7 @@ public class DOMMenu {
       validator.validate(new DOMSource(document));
       return true;
     } catch (Exception e){
-      System.err.println("Could not load schema or validate");
+      System.err.println("Could not load schema or validate. Location of error and specification given:\n");
       System.err.println(e);
       return false;
     }
